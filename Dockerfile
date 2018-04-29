@@ -1,12 +1,31 @@
-# Use latest jboss/base-jdk:8 image as the base
-FROM jboss/base-jdk:8
+FROM debian:latest
+MAINTAINER Daniel Mulzer <daniel.mulzer@fau.de>
 
-# Set the WILDFLY_VERSION env variable
+# Install packages necessary to run EAP
+RUN apt update &&  \
+    apt-get -y install curl xmlstarlet libsaxon-java augeas-tools bsdtar tar openjdk-8-jdk-headless && \
+    apt-get -y autoremove && \
+    apt-get -y clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create a user and group used to launch processes
+# The user ID 1000 is the default for the first "regular" user on Fedora/RHEL,
+# so there is a high chance that this ID will be equal to the current user
+# making it easier to use volumes (no permission issues)
+RUN groupadd -r jboss -g 1000 && useradd -u 1000 -r -g jboss -m -d /opt/jboss -s /sbin/nologin -c "JBoss user" jboss && \
+    chmod 755 /opt/jboss
+
+# Set the working directory to jboss' user home directory
+WORKDIR /opt/jboss
+
+# Specify the user which should be used to execute all commands below
+USER root
+
 ENV WILDFLY_VERSION 12.0.0.Final
-ENV WILDFLY_SHA1 b2039cc4979c7e50a0b6ee0e5153d13d537d492f 
+ENV WILDFLY_SHA1 b2039cc4979c7e50a0b6ee0e5153d13d537d492f
 ENV JBOSS_HOME /opt/jboss/wildfly
 
-USER root
+
 
 # Add the WildFly distribution to /opt, and make wildfly the owner of the extracted tar content
 # Make sure the distribution is available from a well-known place
@@ -24,9 +43,9 @@ ENV LAUNCH_JBOSS_IN_BACKGROUND true
 
 USER jboss
 
-# Expose the ports we're interested in
-EXPOSE 8080
+# Set the JAVA_HOME variable to make it clear where Java is located
+ENV JAVA_HOME $(dirname $(dirname $(readlink -f $(which javac))))
 
-# Set the default command to run on boot
-# This will boot WildFly in the standalone mode and bind to all interface
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
+EXPOSE 8080 
+
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]

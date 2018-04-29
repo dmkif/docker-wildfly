@@ -6,15 +6,15 @@ This is an example Dockerfile with [WildFly application server](http://wildfly.o
 
 To boot in standalone mode
 
-    docker run -it jboss/wildfly
+    docker run -it dmkif/wildfly
     
 To boot in standalone mode with admin console available remotely
 
-    docker run -p 8080:8080 -p 9990:9990 -it jboss/wildfly /opt/jboss/wildfly/bin/standalone.sh -bmanagement 0.0.0.0
+    docker run -p 8080:8080 -p 9990:9990 -it dmkif/wildfly /opt/jboss/wildfly/bin/standalone.sh -bmanagement 0.0.0.0
 
 To boot in domain mode
 
-    docker run -it jboss/wildfly /opt/jboss/wildfly/bin/domain.sh -b 0.0.0.0 -bmanagement 0.0.0.0
+    docker run -it dmkif/wildfly /opt/jboss/wildfly/bin/domain.sh -b 0.0.0.0 -bmanagement 0.0.0.0
 
 ## Application deployment
 
@@ -35,7 +35,7 @@ To do this you just need to extend the `jboss/wildfly` image by creating a new o
 
 1. Create `Dockerfile` with following content:
 
-        FROM jboss/wildfly
+        FROM dmkif/wildfly
         ADD your-awesome-app.war /opt/jboss/wildfly/standalone/deployments/
 2. Place your `your-awesome-app.war` file in the same directory as your `Dockerfile`.
 3. Run the build with `docker build --tag=wildfly-app .`
@@ -59,17 +59,17 @@ Sometimes you need to customize the application server configuration. There are 
 
 To be able to create a management user to access the administration console create a Dockerfile with the following content
 
-    FROM jboss/wildfly
+    FROM dmkif/wildfly
     RUN /opt/jboss/wildfly/bin/add-user.sh admin Admin#70365 --silent
     CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
 
 Then you can build the image:
 
-    docker build --tag=jboss/wildfly-admin .
+    docker build --tag=dmkif/wildfly-admin .
 
 Run it:
 
-    docker run -it jboss/wildfly-admin
+    docker run -it dmkif/wildfly-admin
 
 Administration console will be available on the port `9990` of the container.
 
@@ -77,11 +77,12 @@ Administration console will be available on the port `9990` of the container.
 
 You don't need to do this on your own, because we prepared a trusted build for this repository, but if you really want:
 
-    docker build --rm=true --tag=jboss/wildfly .
+    docker build --rm=true --tag=dmkif/wildfly .
 
-## Image internals [updated Oct 14, 2014]
+## Image internals [updated Apr 29, 2018]
 
-This image extends the [`jboss/base-jdk:8`](https://github.com/jboss-dockerfiles/base-jdk/tree/jdk8) image which adds the OpenJDK distribution on top of the [`jboss/base`](https://github.com/jboss-dockerfiles/base) image. Please refer to the README.md for selected images for more info.
+The [`official image`](https://hub.docker.com/r/jboss/wildfly/) is based on CentOs 7, which does not support the s390 architecture, see [`Official Site`](https://wiki.centos.org/About/Product). Therefore this image combines the build process of  [`jboss/base-jdk:8`](https://github.com/jboss-dockerfiles/base-jdk/tree/jdk8) and [`jboss/base`](https://github.com/jboss-dockerfiles/base) to enable the s390 architecture support.
+Please refer to the README.md for selected images for more info.
 
 The server is run as the `jboss` user which has the uid/gid set to `1000`.
 
@@ -89,8 +90,8 @@ WildFly is installed in the `/opt/jboss/wildfly` directory.
 
 ## Source
 
-The source is [available on GitHub](https://github.com/jboss-dockerfiles/wildfly).
+The source is [available on GitHub](https://github.com/dmkif/docker-wildfly).
 
 ## Issues
 
-Please report any issues or file RFEs on [GitHub](https://github.com/jboss-dockerfiles/wildfly/issues).
+Please report any issues or file RFEs on [GitHub](https://github.com/dmkif/docker-wildfly/issues).
