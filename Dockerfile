@@ -1,5 +1,6 @@
-FROM debian:latest
+FROM @@ARCH@@/debian:latest
 MAINTAINER Daniel Mulzer <daniel.mulzer@fau.de>
+ADD qemu-user-static/bin/qemu-@@ARCH_2@@-static /usr/bin/qemu-@@ARCH_2@@-static
 
 # Install packages necessary to run EAP
 RUN apt update &&  \

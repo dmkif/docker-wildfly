@@ -1,4 +1,5 @@
 # WildFly Docker image
+[![Build Status](https://travis-ci.org/dmkif/docker-wildfly.svg?branch=master)](https://travis-ci.org/dmkif/docker-wildfly)
 
 This is an example Dockerfile with [WildFly application server](http://wildfly.org/).
 
