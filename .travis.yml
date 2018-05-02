@@ -63,3 +63,5 @@ jobs:
    - docker manifest push $REPO
    - docker manifest inspect $REPO
    - docker logout
+  after_script: skip
+  
