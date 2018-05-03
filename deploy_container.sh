@@ -1,7 +1,6 @@
 #!/bin/sh
 #Login to DockerHub 
-docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORT"
-
+echo "$DOCKER_PASSWORT" | docker login -u "$DOCKER_USER" --password-stdin
 #if branch is master tag image as latest and push it
 if [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_BRANCH" = "master" ]
  then

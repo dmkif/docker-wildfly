@@ -1,5 +1,6 @@
 #!/bin/sh
-docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORT"
+#Login to DockerHub 
+echo "$DOCKER_PASSWORT" | docker login -u "$DOCKER_USER" --password-stdin
 docker pull $REPO-s390x:$TRAVIS_BUILD_NUMBER
 docker pull $REPO-amd64:$TRAVIS_BUILD_NUMBER
 docker manifest create "$REPO:$PUBTAG" "${REPO}-s390x:${TRAVIS_BUILD_NUMBER}" "${REPO}-amd64:${TRAVIS_BUILD_NUMBER}"
