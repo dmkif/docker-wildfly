@@ -49,7 +49,7 @@ after_script:
 
 jobs:
  include:
-  -stage: deploy manifest
+  -stage: deploy manifest latest
    if: branch = master
    env: PUBTAG=latest
    script: 
@@ -64,7 +64,6 @@ jobs:
    - docker manifest push "${REPO}:${PUBTAG}"
    - docker manifest inspect "${REPO}:${PUBTAG}"
    - docker logout
- include:
   -stage: deploy manifest
    env: PUBTAG=${TRAVIS_BUILD_NUMBER}
    script: 
