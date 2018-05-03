@@ -49,11 +49,10 @@ after_script:
 
 jobs:
  include:
-  - &deploy-staging
-    stage: deploy manifest
-    if: branch = master
-    env: PUBTAG=latest
-  script: 
+  -stage: deploy manifest
+   if: branch = master
+   env: PUBTAG=latest
+   script: 
    - echo "{\"experimental\":true}" | sudo tee /etc/docker/daemon.json
    - sudo service docker restart
    - docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORT"
@@ -65,7 +64,20 @@ jobs:
    - docker manifest push "${REPO}:${PUBTAG}"
    - docker manifest inspect "${REPO}:${PUBTAG}"
    - docker logout
-  after_script: skip
-  - <<: *deploy-staging
-     env: PUBTAG=$TRAVIS_BUILD_NUMBER
+ include:
+  -stage: deploy manifest
+   env: PUBTAG=${TRAVIS_BUILD_NUMBER}
+   script: 
+   - echo "{\"experimental\":true}" | sudo tee /etc/docker/daemon.json
+   - sudo service docker restart
+   - docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORT"
+   - docker pull "${REPO}-s390x:${TRAVIS_BUILD_NUMBER}"
+   - docker pull "${REPO}-amd64:${TRAVIS_BUILD_NUMBER}"
+   - docker manifest create "${REPO}:${PUBTAG}" "${REPO}-s390x:${TRAVIS_BUILD_NUMBER}" "${REPO}-amd64:${TRAVIS_BUILD_NUMBER}"
+   - docker manifest annotate --arch=s390x --os=linux "${REPO}:${TRAVIS_BUILD_NUMBER}" "${REPO}-s390x:${TRAVIS_BUILD_NUMBER}"
+   - docker manifest annotate --arch=amd64 --os=linux "${REPO}:${TRAVIS_BUILD_NUMBER}" "${REPO}-amd64:${TRAVIS_BUILD_NUMBER}"
+   - docker manifest push "${REPO}:${PUBTAG}"
+   - docker manifest inspect "${REPO}:${PUBTAG}"
+   - docker logout
+  
   
