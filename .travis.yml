@@ -49,10 +49,10 @@ after_script:
 
 jobs:
  include:
-  -stage: deploy manifest latest
-   if: branch = master
-   env: PUBTAG=latest
-   script: 
+ stage: deploy manifest latest
+ if: branch = master
+ env: PUBTAG=latest
+ script: 
    - echo "{\"experimental\":true}" | sudo tee /etc/docker/daemon.json
    - sudo service docker restart
    - docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORT"
@@ -64,9 +64,9 @@ jobs:
    - docker manifest push "${REPO}:${PUBTAG}"
    - docker manifest inspect "${REPO}:${PUBTAG}"
    - docker logout
-  -stage: deploy manifest
-   env: PUBTAG=${TRAVIS_BUILD_NUMBER}
-   script: 
+ stage: deploy manifest
+ env: PUBTAG=${TRAVIS_BUILD_NUMBER}
+ script: 
    - echo "{\"experimental\":true}" | sudo tee /etc/docker/daemon.json
    - sudo service docker restart
    - docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORT"
