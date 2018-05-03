@@ -51,9 +51,10 @@ jobs:
  include:
   stage: deploy manifest
   if: branch = master
-  env:
-  - PUBTAG=latest
-  - PUBTAG=$TRAVIS_BUILD_NUMBER
+  matrix:
+   env:
+   - PUBTAG=latest
+   - PUBTAG=$TRAVIS_BUILD_NUMBER
   script: 
    - echo "{\"experimental\":true}" | sudo tee /etc/docker/daemon.json
    - sudo service docker restart
