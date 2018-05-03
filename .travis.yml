@@ -49,12 +49,10 @@ after_script:
 
 jobs:
  include:
-  stage: deploy manifest
-  if: branch = master
-  env: 
-   matrix: 
-   - PUBTAG=latest
-   - PUBTAG=$TRAVIS_BUILD_NUMBER
+  - &deploy-staging
+    stage: deploy manifest
+    if: branch = master
+    env: PUBTAG=latest
   script: 
    - echo "{\"experimental\":true}" | sudo tee /etc/docker/daemon.json
    - sudo service docker restart
@@ -68,4 +66,6 @@ jobs:
    - docker manifest inspect "${REPO}:${PUBTAG}"
    - docker logout
   after_script: skip
+  - <<: *deploy-staging
+     env: PUBTAG=$TRAVIS_BUILD_NUMBER
   
