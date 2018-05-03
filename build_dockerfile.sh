@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 if [[ $ARCH == "amd64" ]]
 then
     sed s/"@@ARCH_2@@"/"x84_64"/g Dockerfile.$ARCH

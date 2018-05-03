@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #Update Repository and install requirements
 sudo apt-get update
 sudo apt-get -y install binfmt-support build-essential qemu

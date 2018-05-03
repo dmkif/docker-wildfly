@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORT"
 docker pull $REPO-s390x:$TRAVIS_BUILD_NUMBER
 docker pull $REPO-amd64:$TRAVIS_BUILD_NUMBER

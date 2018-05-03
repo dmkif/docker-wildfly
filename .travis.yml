@@ -10,17 +10,17 @@ env:
   - ARCH=amd64
  
 install:
-  - bash ./build_environment.sh
+  - sh ./build_environment.sh
 
 before_script:
   - export TAG=`if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then echo "latest"; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi`
 
 script:
-  - bash build_dockerfile.sh
+  - sh ./build_dockerfile.sh
   - travis_wait 60 docker build --compress --squash -t "${REPO}-${ARCH}:${TAG}" -f Dockerfile."${ARCH}" .
   - docker images "${REPO}-${ARCH}:${TAG}"
   - docker run --entrypoint "uname" -t "${REPO}-${ARCH}:${TAG}" -a
-  - bash ./deploy_container.sh
+  - sh ./deploy_container.sh
 
 jobs:
   include:
