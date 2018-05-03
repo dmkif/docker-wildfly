@@ -25,9 +25,10 @@ script:
 jobs:
   include:
     - stage: deploy manifest
+      env: PUBTAG=${TRAVIS_BUILD_NUMBER}
+      script: bash ./deploy_manifest.sh
+    - stage: deploy manifest
       if: branch = master
       env: PUBTAG=latest
       script: bash ./deploy_manifest.sh
-    - stage: deploy manifest
-      env: PUBTAG=${TRAVIS_BUILD_NUMBER}
-      script: bash ./deploy_manifest.sh
+    
