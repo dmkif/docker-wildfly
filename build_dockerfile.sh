@@ -1,8 +1,8 @@
 #!/bin/sh
-if [[ $ARCH == "amd64" ]]
+if [ $ARCH = "amd64" ]
 then
     sed s/"@@ARCH_2@@"/"x84_64"/g Dockerfile.$ARCH
-elif [[ $ARCH == "arm64v8"]]
+elif [ $ARCH = "arm64v8"]
 then
     sed s/"@@ARCH_2@@"/"aarch64"/g Dockerfile.$ARCH
 else
