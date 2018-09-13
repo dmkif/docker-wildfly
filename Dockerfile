@@ -1,10 +1,8 @@
-FROM multiarch/debian-debootstrap:@@ARCH@@-jessie-slim
+FROM dmkif/gnucobol:@@ARCH@@-latest
 MAINTAINER Daniel Mulzer <daniel.mulzer@fau.de>
 
 # Install packages necessary to run JBoss Wildfly and GnuCobol
 USER root
-# Install backport repository 
-RUN echo "deb http://http.debian.net/debian jessie-backports main" >> /etc/apt/sources.list
 RUN apt update &&  \
     apt-get -y install -t jessie-backports curl xmlstarlet libsaxon-java augeas-tools bsdtar tar openjdk-8-jdk-headless libncurses5-dev libgmp-dev && \
     apt-get -y autoremove && \
