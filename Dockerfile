@@ -4,7 +4,7 @@ MAINTAINER Daniel Mulzer <daniel.mulzer@fau.de>
 # Install packages necessary to run JBoss Wildfly and GnuCobol
 USER root
 RUN apt-get update &&  \
-    apt-get -y install -t jessie-backports curl xmlstarlet libsaxon-java augeas-tools bsdtar tar openjdk-8-jdk-headless libncurses5-dev libgmp-dev && \
+    apt-get -y install curl xmlstarlet libsaxon-java augeas-tools bsdtar tar openjdk-8-jdk-headless libncurses5-dev libgmp-dev && \
     apt-get -y autoremove && \
     apt-get -y clean && \
     rm -rf /var/lib/apt/lists/*
